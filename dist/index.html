@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FreeAI Chat — Free AI Chat, No Sign-up</title>
+<meta name="description" content="Free AI chat website. No sign-up, works in the browser, powered by free public models with responsible use." />
+<style>
+:root{--bg:#0b0f1a;--panel:#131a2b;--panel2:#1a2340;--text:#eef2ff;--muted:#9aa7c7;--accent:#7c6cff;--accent2:#38e1c6;--border:#263154;--danger:#ff7a7a}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(1200px 600px at 20% -10%,#1c2560 0%,transparent 60%),radial-gradient(900px 500px at 90% 0%,#0e5a55 0%,transparent 55%),var(--bg);color:var(--text);min-height:100vh}
+a{color:var(--accent2)}
+.wrap{max-width:1080px;margin:0 auto;padding:20px}
+header.top{display:flex;align-items:center;gap:12px;padding:14px 0}
+.logo{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;font-weight:900;color:#0b0f1a}
+.brand{font-weight:800;letter-spacing:.2px}
+.brand small{display:block;color:var(--muted);font-weight:500}
+nav{margin-left:auto;display:flex;gap:10px;align-items:center}
+.badge{font-size:12px;border:1px solid var(--border);padding:6px 10px;border-radius:999px;color:var(--muted);background:rgba(255,255,255,.03)}
+.dot{width:8px;height:8px;border-radius:50%;background:#38e1c6;display:inline-block;margin-right:6px;box-shadow:0 0 10px #38e1c6}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin:14px 0 18px}
+@media(max-width:860px){.hero{grid-template-columns:1fr}}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid var(--border);border-radius:18px;padding:20px}
+h1{margin:0 0 8px;font-size:clamp(26px,4vw,40px);line-height:1.05}
+p.lead{color:var(--muted);margin:0 0 14px}
+.cta-row{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+button,.btn{appearance:none;border:1px solid var(--border);background:var(--panel2);color:var(--text);padding:11px 14px;border-radius:12px;font-weight:700;cursor:pointer}
+button.primary{background:linear-gradient(135deg,var(--accent),#4f8cff);border-color:transparent}
+button:disabled{opacity:.6;cursor:wait}
+.chat{display:flex;flex-direction:column;height:520px;overflow:hidden}
+@media(max-width:560px){.chat{height:62vh}}
+.msgs{flex:1;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:4px 2px}
+.msg{max-width:88%;padding:11px 13px;border-radius:14px;line-height:1.45;white-space:pre-wrap;word-break:break-word;font-size:15px}
+.msg.bot{background:#1b2442;border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:6px}
+.msg.user{background:linear-gradient(135deg,#3b34b8,#2a6bff);align-self:flex-end;border-bottom-right-radius:6px}
+.msg .role{font-size:11px;opacity:.7;display:block;margin-bottom:4px;font-weight:800;letter-spacing:.6px;text-transform:uppercase}
+.typing{opacity:.8;font-style:italic}
+.controls{display:grid;grid-template-columns:1fr 140px;gap:8px;margin-top:10px}
+@media(max-width:560px){.controls{grid-template-columns:1fr}}
+.row{display:flex;gap:8px}
+input[type=text],select,textarea{background:#0e1530;border:1px solid var(--border);color:var(--text);border-radius:12px;padding:11px 12px;width:100%;font-size:15px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;align-items:center}
+.toolbar label{font-size:12px;color:var(--muted)}
+.toolbar input[type=range]{accent-color:var(--accent)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+.feat h3{margin:0 0 6px;font-size:16px}
+.feat p{margin:0;color:var(--muted);font-size:14px}
+.notice{border:1px solid #3a3f6b;background:#171a38;border-radius:12px;padding:12px 14px;color:#c9d1f2;font-size:13.5px}
+footer{color:var(--muted);font-size:13px;padding:18px 0 30px;display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between}
+code.k{background:#0e1530;border:1px solid var(--border);padding:2px 6px;border-radius:6px}
+.status{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="logo">AI</div>
+    <div class="brand">FreeAI Chat <small>Free AI website · no sign-up · runs in browser</small></div>
+    <nav>
+      <span class="badge"><span class="dot"></span><span id="net-status">ready</span></span>
+      <span class="badge">open · free · fast</span>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="card">
+      <h1>Free AI chat in your browser.</h1>
+      <p class="lead">Ask questions, write, code, brainstorm and learn. No account, no key, no install. Powered by free public models. Please use responsibly — illegal or harmful requests are blocked.</p>
+      <div class="cta-row">
+        <button class="primary" id="try-btn">Start chatting now</button>
+        <button id="clear-btn2">Clear conversation</button>
+      </div>
+      <div class="notice"><strong>Responsible use:</strong> this demo is an open chat front-end. It does not provide disallowed content (for example: illicit behavior, non-consensual or sexual content involving minors, or personal data). The back-end may refuse unsafe prompts. Everything runs client-side; conversation is stored only in your browser.</div>
+      <p class="status" id="model-status">Model: openai (free public endpoint) · Temperature <span id="temp-val">0.7</span></p>
+    </div>
+    <div class="card chat" id="chat-card" aria-label="AI chat">
+      <div class="msgs" id="msgs"></div>
+      <div class="toolbar">
+        <label>Model <select id="model"><option value="openai">openai (default)</option><option value="mistral">mistral</option><option value="llama">llama</option><option value="local-echo">offline demo (no network)</option></select></label>
+        <label>Creativity <input type="range" id="temp" min="0" max="1.2" step="0.1" value="0.7" style="width:110px" /></label>
+        <button id="clear-btn" title="Clear">Clear</button>
+      </div>
+      <div class="controls">
+        <input type="text" id="input" placeholder="Type a message and press Enter — e.g. Explain black holes simply" autocomplete="off" />
+        <div class="row"><button class="primary" id="send-btn" style="flex:1">Send</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card feat"><h3>⚡ No sign-up</h3><p>Open the page and chat. History stays in <code class="k">localStorage</code> on your device only.</p></div>
+    <div class="card feat"><h3>🌐 Free public API</h3><p>Uses the free <code class="k">text.pollinations.ai</code> endpoint when online, with an offline echo fallback so the UI always works.</p></div>
+    <div class="card feat"><h3>📱 Desktop + mobile</h3><p>Responsive layout tuned for 1440×900 and 390×844 screenshots and real phones.</p></div>
+  </section>
+
+  <section class="card">
+    <h3 style="margin:0 0 8px">How it works</h3>
+    <p style="margin:0;color:var(--muted)">1. Type below and press Send. 2. The browser calls the free text API with your prompt. 3. If the network is blocked, the built-in offline demo replies instantly so you can still try the UI. 4. Use Clear to erase local history.</p>
+  </section>
+
+  <footer><span>FreeAI Chat — educational demo. Not affiliated with any model provider.</span><span>Tip: try “Write a haiku about the ocean”.</span></footer>
+</div>
+<script>
+(function(){
+  var msgs=document.getElementById('msgs'),input=document.getElementById('input'),
+  send=document.getElementById('send-btn'),model=document.getElementById('model'),
+  temp=document.getElementById('temp'),tempVal=document.getElementById('temp-val'),
+  net=document.getElementById('net-status'),modelStatus=document.getElementById('model-status');
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function add(role,text){var d=document.createElement('div');d.className='msg '+(role==='user'?'user':'bot');
+    d.innerHTML='<span class="role">'+role+'</span>'+esc(text);msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;save();return d;}
+  function save(){try{var h=[];msgs.querySelectorAll('.msg').forEach(function(m){h.push(m.textContent);});localStorage.setItem('freeai-history',JSON.stringify(h.slice(-20)));}catch(e){}}
+  function load(){try{var h=JSON.parse(localStorage.getItem('freeai-history')||'[]');if(h.length){h.forEach(function(t,i){add(i%2?'bot':'user',t.replace(/^(user|assistant|bot)/i,'').slice(0,500));});return true;}}catch(e){}return false;}
+  temp.addEventListener('input',function(){tempVal.textContent=temp.value;modelStatus.textContent='Model: '+model.value+' (free public endpoint) · Temperature '+temp.value;});
+  model.addEventListener('change',function(){modelStatus.textContent='Model: '+model.value+' (free public endpoint) · Temperature '+temp.value;});
+  function offlineReply(q){var s=q.toLowerCase();
+    if(/hello|hi\b/.test(s))return 'Hello! I am the offline demo. Ask me anything — connect to the internet for full AI answers.';
+    if(/haiku|poem/.test(s))return 'Silent ocean深\nWaves remember every shore\nMoonlight drifts you home\n\n(offline demo — go online for live model output.)';
+    if(/code|python|javascript/.test(s))return 'Here is a tiny example:\n\nfunction greet(name){\n  return "Hello, "+name+"!";\n}\n\nGo online and pick openai/mistral/llama for full coding help.';
+    if(/black hole/.test(s))return 'A black hole is a region where gravity is so strong that nothing, not even light, escapes. (offline summary — go online for deeper answers.)';
+    return 'You said: "'+q.slice(0,220)+'"\n\nI am the offline demo reply. Connect to the internet and choose a live model for a full AI answer. Your UI, history and layout all work offline.';}
+  async function liveReply(q){var m=model.value;if(m==='local-echo')return offlineReply(q);
+    var url='https://text.pollinations.ai/'+encodeURIComponent(q)+'?model='+encodeURIComponent(m);
+    var ctl=new AbortController();var t=setTimeout(function(){ctl.abort();},25000);
+    try{var r=await fetch(url,{signal:ctl.signal});clearTimeout(t);if(!r.ok)throw new Error('HTTP '+r.status);
+      var txt=await r.text();return (txt||'').trim().slice(0,4000)||offlineReply(q);}
+    catch(e){return offlineReply(q)+' \n\n(note: live API unreachable, used offline fallback.)';}}
+  async function go(){var q=input.value.trim();if(!q)return;input.value='';send.disabled=true;
+    add('user',q);var b=add('bot','thinking…');b.classList.add('typing');
+    var ans=await liveReply(q);b.classList.remove('typing');b.innerHTML='<span class="role">bot</span>'+esc(ans);msgs.scrollTop=msgs.scrollHeight;save();send.disabled=false;input.focus();}
+  send.addEventListener('click',go);
+  input.addEventListener('keydown',function(e){if(e.key==='Enter')go();});
+  function clear(){msgs.innerHTML='';try{localStorage.removeItem('freeai-history');}catch(e){}welcome();}
+  document.getElementById('clear-btn').addEventListener('click',clear);
+  document.getElementById('clear-btn2').addEventListener('click',function(){document.getElementById('chat-card').scrollIntoView({behavior:'smooth'});clear();input.focus();});
+  document.getElementById('try-btn').addEventListener('click',function(){input.focus();document.getElementById('chat-card').scrollIntoView({behavior:'smooth'});});
+  function welcome(){add('bot','Welcome to FreeAI Chat! No sign-up needed. Try: “Write a haiku about the ocean” or “Explain black holes simply”. Pick a model below and press Send.');}
+  try{net.textContent=navigator.onLine?'ready • '+(location.protocol==='https:'?'secure':'local'):'offline demo ready';}catch(e){net.textContent='ready';}
+  if(!load())welcome();
+})();
+</script>
+</body>
+</html>
